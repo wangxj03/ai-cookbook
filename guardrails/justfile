@@ -1,0 +1,17 @@
+run:
+    docker compose up --build
+
+chat-good:
+    curl -X POST "http://0.0.0.0:8000/v1/chat/completions" \
+        -H "Content-Type: application/json" \
+        -d @testdata/chat_good.json | jq
+
+chat-bad-topic:
+    curl -X POST "http://0.0.0.0:8000/v1/chat/completions" \
+        -H "Content-Type: application/json" \
+        -d @testdata/chat_bad_topic.json | jq
+
+chat-bad-moderation:
+    curl -X POST "http://0.0.0.0:8000/v1/chat/completions" \
+        -H "Content-Type: application/json" \
+        -d @testdata/chat_bad_moderation.json | jq
