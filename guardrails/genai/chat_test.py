@@ -32,7 +32,7 @@ def mock_openai() -> AsyncMock:
     return mock
 
 
-@pytest.mark.asyncio
+@pytest.mark.asyncio()
 async def test_check_topic(mock_openai: AsyncMock) -> None:
     mock_response = MagicMock()
     mock_response.choices[0].message.content = "allowed"
@@ -55,7 +55,7 @@ async def test_check_topic(mock_openai: AsyncMock) -> None:
     assert result == "allowed"
 
 
-@pytest.mark.asyncio
+@pytest.mark.asyncio()
 @patch("genai.chat.check_topic")
 async def test_topic_guardrail_not_allowed(
     mock_check_topic: AsyncMock, mock_openai: AsyncMock
@@ -73,7 +73,7 @@ async def test_topic_guardrail_not_allowed(
     )
 
 
-@pytest.mark.asyncio
+@pytest.mark.asyncio()
 async def test_check_moderation(mock_openai: AsyncMock) -> None:
     mock_response = MagicMock()
     mock_response.choices[0].message.content = "2"
@@ -98,7 +98,7 @@ async def test_check_moderation(mock_openai: AsyncMock) -> None:
     assert result == "2"
 
 
-@pytest.mark.asyncio
+@pytest.mark.asyncio()
 @patch("genai.chat.check_moderation")
 async def test_moderation_guardrail_not_permitted(
     mock_check_moderation: AsyncMock, mock_openai: AsyncMock
@@ -118,7 +118,7 @@ async def test_moderation_guardrail_not_permitted(
     )
 
 
-@pytest.mark.asyncio
+@pytest.mark.asyncio()
 @patch("genai.chat.moderation_guardrail")
 @patch("genai.chat.topic_guardrail")
 async def test_chat_with_guardrails_success(
@@ -149,7 +149,7 @@ async def test_chat_with_guardrails_success(
     )
 
 
-@pytest.mark.asyncio
+@pytest.mark.asyncio()
 @patch("genai.chat.topic_guardrail")
 async def test_chat_with_guardrails_topic_bad(
     mock_topic_guardrail: AsyncMock,
@@ -176,7 +176,7 @@ async def test_chat_with_guardrails_topic_bad(
     assert completion_dict["object"] == "chat.completion"
 
 
-@pytest.mark.asyncio
+@pytest.mark.asyncio()
 @patch("genai.chat.moderation_guardrail")
 @patch("genai.chat.topic_guardrail")
 async def test_chat_with_guardrail_moderation_bad(
