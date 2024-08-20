@@ -9,9 +9,9 @@ from openai.types.chat import (
 
 from genai.chat import (
     GuardrailException,
+    ModerationGuardrailResult,
+    TopicGuardrailResult,
     chat_with_guardrails,
-    check_moderation,
-    check_topic,
     moderation_guardrail,
     topic_guardrail,
 )
@@ -19,7 +19,7 @@ from genai.prompts import (
     ANIMAL_ADVICE_CRITERIA,
     ANIMAL_ADVICE_STEPS,
     DOMAIN,
-    MODERATION_SYSTEM_PROMPT,
+    MODERATION_GUARDRAIL_PROMPT,
     TOPIC_GUARDRAIL_PROMPT,
 )
 
@@ -27,22 +27,24 @@ from genai.prompts import (
 @pytest.fixture
 def mock_openai() -> AsyncMock:
     mock = AsyncMock(spec=AsyncOpenAI)
+    mock.beta = AsyncMock()
+    mock.beta.chat.completions.parse = AsyncMock()
     mock.chat = AsyncMock()
     mock.chat.completions.create = AsyncMock()
     return mock
 
 
 @pytest.mark.asyncio()
-async def test_check_topic(mock_openai: AsyncMock) -> None:
+async def test_topic_guardrail_allowed(mock_openai: AsyncMock) -> None:
     mock_response = MagicMock()
-    mock_response.choices[0].message.content = "allowed"
-    mock_openai.chat.completions.create = AsyncMock(return_value=mock_response)
+    mock_response.choices[0].message.parsed = TopicGuardrailResult(allowed=True)
+    mock_openai.beta.chat.completions.parse = AsyncMock(return_value=mock_response)
 
-    result = await check_topic(
+    await topic_guardrail(
         client=mock_openai, model="gpt-4o", content="On-topic message"
     )
 
-    mock_openai.chat.completions.create.assert_awaited_once_with(
+    mock_openai.beta.chat.completions.parse.assert_awaited_once_with(
         model="gpt-4o",
         messages=[
             ChatCompletionSystemMessageParam(
@@ -51,16 +53,15 @@ async def test_check_topic(mock_openai: AsyncMock) -> None:
             ChatCompletionUserMessageParam(role="user", content="On-topic message"),
         ],
         temperature=0.0,
+        response_format=TopicGuardrailResult,
     )
-    assert result == "allowed"
 
 
 @pytest.mark.asyncio()
-@patch("genai.chat.check_topic")
-async def test_topic_guardrail_not_allowed(
-    mock_check_topic: AsyncMock, mock_openai: AsyncMock
-) -> None:
-    mock_check_topic.return_value = "not_allowed"
+async def test_topic_guardrail_not_allowed(mock_openai: AsyncMock) -> None:
+    mock_response = MagicMock()
+    mock_response.choices[0].message.parsed = TopicGuardrailResult(allowed=False)
+    mock_openai.beta.chat.completions.parse = AsyncMock(return_value=mock_response)
 
     with pytest.raises(GuardrailException) as e:
         await topic_guardrail(
@@ -68,53 +69,48 @@ async def test_topic_guardrail_not_allowed(
         )
 
     assert str(e.value) == "Only topics related to dogs or cats are allowed!"
-    mock_check_topic.assert_awaited_once_with(
-        client=mock_openai, model="gpt-4o", content="Off-topic message"
-    )
 
 
 @pytest.mark.asyncio()
-async def test_check_moderation(mock_openai: AsyncMock) -> None:
+@pytest.mark.parametrize("score", [1, 2])
+async def test_moderation_guardrail_pass(mock_openai: AsyncMock, score: int) -> None:
     mock_response = MagicMock()
-    mock_response.choices[0].message.content = "2"
-    mock_openai.chat.completions.create = AsyncMock(return_value=mock_response)
+    mock_response.choices[0].message.parsed = ModerationGuardrailResult(score=score)
+    mock_openai.beta.chat.completions.parse = AsyncMock(return_value=mock_response)
 
-    result = await check_moderation(
-        client=mock_openai, model="gpt-4o", content="Assistant response"
+    await moderation_guardrail(
+        client=mock_openai, model="gpt-4o", content="No animal breeding advice"
     )
 
-    content = MODERATION_SYSTEM_PROMPT.format(
+    content = MODERATION_GUARDRAIL_PROMPT.format(
         domain=DOMAIN,
         scoring_criteria=ANIMAL_ADVICE_CRITERIA,
         scoring_steps=ANIMAL_ADVICE_STEPS,
-        content="Assistant response",
+        content="No animal breeding advice",
     )
 
-    mock_openai.chat.completions.create.assert_awaited_once_with(
+    mock_openai.beta.chat.completions.parse.assert_awaited_once_with(
         model="gpt-4o",
         messages=[ChatCompletionUserMessageParam(role="user", content=content)],
         temperature=0.0,
+        response_format=ModerationGuardrailResult,
     )
-    assert result == "2"
 
 
 @pytest.mark.asyncio()
-@patch("genai.chat.check_moderation")
-async def test_moderation_guardrail_not_permitted(
-    mock_check_moderation: AsyncMock, mock_openai: AsyncMock
-) -> None:
-    mock_check_moderation.return_value = "5"
+@pytest.mark.parametrize("score", [3, 4, 5])
+async def test_moderation_guardrail_fail(mock_openai: AsyncMock, score: int) -> None:
+    mock_response = MagicMock()
+    mock_response.choices[0].message.parsed = ModerationGuardrailResult(score=score)
+    mock_openai.beta.chat.completions.parse = AsyncMock(return_value=mock_response)
 
     with pytest.raises(GuardrailException) as e:
         await moderation_guardrail(
-            client=mock_openai, model="gpt-4o", content="Not permitted message"
+            client=mock_openai, model="gpt-4o", content="Animal breeding advice"
         )
 
     assert (
         str(e.value) == "Response skipped because animal breeding advice was detected!"
-    )
-    mock_check_moderation.assert_awaited_once_with(
-        client=mock_openai, model="gpt-4o", content="Not permitted message"
     )
 
 
