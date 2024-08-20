@@ -11,7 +11,8 @@ WORKDIR /app
 COPY requirements.txt .
 
 # Install the required packages
-RUN pip install --no-cache-dir -r requirements.txt
+RUN python -m pip install --upgrade pip
+RUN pip install -r requirements.txt
 
 # Copy the Python files into the container
 COPY genai/ ./genai

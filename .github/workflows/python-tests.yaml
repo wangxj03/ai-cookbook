@@ -1,0 +1,23 @@
+name: Python unit tests
+on:
+  push:
+    paths:
+      - "guardrails/**"
+  pull_request:
+    paths:
+      - "guardrails/**"
+
+jobs:
+  test-guardrails:
+    if: ${{ github.event_name == 'push' || github.event_name == 'pull_request' }}
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out the code
+        uses: actions/checkout@v3
+
+      - name: Run tests for guardrails
+        run: |
+          cd guardrails
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+          pytest -vv
