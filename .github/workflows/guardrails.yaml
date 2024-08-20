@@ -1,4 +1,4 @@
-name: Python unit tests
+name: Guardrails unit tests
 on:
   push:
     paths:
