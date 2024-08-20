@@ -2,4 +2,5 @@ absl-py
 fastapi
 openai
 pydantic
+pytest
 uvicorn
