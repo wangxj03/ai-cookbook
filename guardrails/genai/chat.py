@@ -3,7 +3,8 @@ import time
 from uuid import uuid4
 
 from fastapi import HTTPException
-from openai import AsyncOpenAI
+from langfuse.decorators import observe
+from langfuse.openai import AsyncOpenAI
 from openai.types.chat import (
     ChatCompletion,
     ChatCompletionMessage,
@@ -35,6 +36,7 @@ class GuardrailException(Exception):
     pass
 
 
+@observe()
 async def topic_guardrail(client: AsyncOpenAI, model: str, content: str) -> None:
     messages = [
         ChatCompletionSystemMessageParam(role="system", content=TOPIC_GUARDRAIL_PROMPT),
@@ -52,6 +54,7 @@ async def topic_guardrail(client: AsyncOpenAI, model: str, content: str) -> None
         raise GuardrailException("Only topics related to dogs or cats are allowed!")
 
 
+@observe()
 async def moderation_guardrail(client: AsyncOpenAI, model: str, content: str) -> None:
     prompt = MODERATION_GUARDRAIL_PROMPT.format(
         domain=DOMAIN,
@@ -75,6 +78,7 @@ async def moderation_guardrail(client: AsyncOpenAI, model: str, content: str) ->
         )
 
 
+@observe()
 async def chat_with_guardrails(
     client: AsyncOpenAI, model: str, messages: list[ChatCompletionMessageParam]
 ) -> ChatCompletion:

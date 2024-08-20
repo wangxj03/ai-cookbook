@@ -2,7 +2,7 @@ from typing import Any
 
 import uvicorn
 from absl import app, flags
-from openai import AsyncOpenAI
+from langfuse.openai import AsyncOpenAI
 
 from genai.service import create_fastapi_app
 
