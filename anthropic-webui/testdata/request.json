@@ -1,0 +1,10 @@
+{
+  "model": "claude-3-5-sonnet-20240620",
+  "messages": [
+    {
+      "role": "user",
+      "content": "Why is the sky blue?"
+    }
+  ],
+  "stream": true
+}
