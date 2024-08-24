@@ -8,7 +8,7 @@ on:
       - "anthropic-webui/**"
 
 jobs:
-  test-guardrails:
+  test-anthropic-webui:
     if: ${{ github.event_name == 'push' || github.event_name == 'pull_request' }}
     runs-on: ubuntu-latest
     strategy:
