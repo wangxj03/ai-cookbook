@@ -1,6 +1,6 @@
 # README
 
-Start the local server
+Start a local server
 
 ```shell
 just run
