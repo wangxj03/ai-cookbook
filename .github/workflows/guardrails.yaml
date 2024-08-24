@@ -1,4 +1,4 @@
-name: Guardrails unit tests
+name: guardrails unit tests
 on:
   push:
     paths:
