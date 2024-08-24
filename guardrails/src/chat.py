@@ -15,7 +15,7 @@ from openai.types.chat import (
 from openai.types.chat.chat_completion import Choice as ChatCompletionChoice
 from pydantic import BaseModel
 
-from genai.prompts import (
+from src.prompts import (
     ANIMAL_ADVICE_CRITERIA,
     ANIMAL_ADVICE_STEPS,
     DOMAIN,

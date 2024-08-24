@@ -7,7 +7,7 @@ from openai.types.chat import (
     ChatCompletionUserMessageParam,
 )
 
-from genai.chat import (
+from src.chat import (
     GuardrailException,
     ModerationGuardrailResult,
     TopicGuardrailResult,
@@ -15,7 +15,7 @@ from genai.chat import (
     moderation_guardrail,
     topic_guardrail,
 )
-from genai.prompts import (
+from src.prompts import (
     ANIMAL_ADVICE_CRITERIA,
     ANIMAL_ADVICE_STEPS,
     DOMAIN,
@@ -115,8 +115,8 @@ async def test_moderation_guardrail_fail(mock_openai: AsyncMock, score: int) -> 
 
 
 @pytest.mark.asyncio()
-@patch("genai.chat.moderation_guardrail")
-@patch("genai.chat.topic_guardrail")
+@patch("src.chat.moderation_guardrail")
+@patch("src.chat.topic_guardrail")
 async def test_chat_with_guardrails_success(
     mock_topic_guardrail: AsyncMock,
     mock_moderation_guardrail: AsyncMock,
@@ -146,7 +146,7 @@ async def test_chat_with_guardrails_success(
 
 
 @pytest.mark.asyncio()
-@patch("genai.chat.topic_guardrail")
+@patch("src.chat.topic_guardrail")
 async def test_chat_with_guardrails_topic_bad(
     mock_topic_guardrail: AsyncMock,
     mock_openai: AsyncMock,
@@ -173,8 +173,8 @@ async def test_chat_with_guardrails_topic_bad(
 
 
 @pytest.mark.asyncio()
-@patch("genai.chat.moderation_guardrail")
-@patch("genai.chat.topic_guardrail")
+@patch("src.chat.moderation_guardrail")
+@patch("src.chat.topic_guardrail")
 async def test_chat_with_guardrail_moderation_bad(
     mock_topic_guardrail: AsyncMock,
     mock_moderation_guardrail: AsyncMock,

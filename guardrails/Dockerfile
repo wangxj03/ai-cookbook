@@ -15,10 +15,10 @@ RUN pip install --upgrade pip
 RUN pip install -r requirements.txt
 
 # Copy the Python files into the container
-COPY genai/ ./genai
+COPY src/ ./src
 
 # Expose the port the app runs on
 EXPOSE 8000
 
 # Run the application
-ENTRYPOINT ["python", "-m", "genai.app"]
+ENTRYPOINT ["python", "-m", "src.app"]

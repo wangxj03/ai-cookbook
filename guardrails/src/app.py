@@ -4,7 +4,7 @@ import uvicorn
 from absl import app, flags
 from langfuse.openai import AsyncOpenAI
 
-from genai.service import create_fastapi_app
+from src.service import create_fastapi_app
 
 FLAGS = flags.FLAGS
 flags.DEFINE_integer("port", 8000, "Port number to run the FastAPI app on")

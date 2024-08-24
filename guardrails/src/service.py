@@ -3,7 +3,7 @@ from openai import AsyncOpenAI
 from openai.types.chat import ChatCompletion, ChatCompletionMessageParam
 from pydantic import BaseModel
 
-from genai.chat import chat_with_guardrails
+from src.chat import chat_with_guardrails
 
 
 class ChatCompletionRequest(BaseModel):
