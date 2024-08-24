@@ -6,4 +6,4 @@ Start a local server
 just run
 ```
 
-Chat with OpenWebUI at http://localhost:3000
+Visit OpenWebUI at http://localhost:3000 to chat with anthropic models
