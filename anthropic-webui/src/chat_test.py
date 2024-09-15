@@ -2,12 +2,96 @@ import json
 from unittest.mock import AsyncMock, MagicMock, patch
 
 import pytest
+from anthropic.types import (
+    ImageBlockParam,
+    MessageParam,
+    TextBlock,
+    TextBlockParam,
+)
+from anthropic.types.image_block_param import Source
 from openai.types.chat import ChatCompletionUserMessageParam
 
 from src.chat import (
     create_chat_completion,
     create_chat_completion_stream,
+    get_anthropic_image_source,
+    get_anthropic_message_content,
+    get_anthropic_messages,
 )
+
+
+def test_get_anthropic_image_source() -> None:
+    url = "data:image/png;base64,iVBORw"
+    source = get_anthropic_image_source(url)
+    assert source == Source(
+        data="iVBORw",
+        media_type="image/png",
+        type="base64",
+    )
+
+
+def test_get_anthropic_message_content_text() -> None:
+    content = "Test message"
+    message_content = get_anthropic_message_content(content)
+    assert message_content == content
+
+
+def test_get_anthropic_message_content_blocks() -> None:
+    content = [
+        {"type": "text", "text": "Test message"},
+        {"type": "image_url", "image_url": {"url": "data:image/png;base64,iVBORw"}},
+    ]
+    message_content = get_anthropic_message_content(content)
+    assert len(message_content) == 2
+    assert message_content[0] == TextBlockParam(text="Test message", type="text")
+    assert message_content[1] == ImageBlockParam(
+        source=Source(data="iVBORw", media_type="image/png", type="base64"),
+        type="image",
+    )
+
+
+def test_get_anthropic_messages_text() -> None:
+    messages = [
+        ChatCompletionUserMessageParam(role="user", content="Test message"),
+    ]
+    message_params = get_anthropic_messages(messages)
+    assert len(message_params) == 1
+    assert message_params[0] == MessageParam(
+        content="Test message",
+        role="user",
+    )
+
+
+def test_get_anthropic_messages_blocks() -> None:
+    messages = [
+        ChatCompletionUserMessageParam(role="user", content="Test message"),
+        ChatCompletionUserMessageParam(
+            role="assistant",
+            content=[
+                {"type": "text", "text": "Test response"},
+                {
+                    "type": "image_url",
+                    "image_url": {"url": "data:image/png;base64,iVBORw"},
+                },
+            ],
+        ),
+    ]
+    message_params = get_anthropic_messages(messages)
+    assert len(message_params) == 2
+    assert message_params[0] == MessageParam(
+        content="Test message",
+        role="user",
+    )
+    assert message_params[1] == MessageParam(
+        content=[
+            TextBlockParam(text="Test response", type="text"),
+            ImageBlockParam(
+                source=Source(data="iVBORw", media_type="image/png", type="base64"),
+                type="image",
+            ),
+        ],
+        role="assistant",
+    )
 
 
 @pytest.mark.asyncio
@@ -16,7 +100,7 @@ async def test_create_chat_completion(mock_anthropic: AsyncMock) -> None:
     mock_response = MagicMock()
     mock_response.id = "123"
     mock_response.created = 1234567890
-    mock_response.content[0].text = "Test response"
+    mock_response.content = [TextBlock(text="Test response", type="text")]
     mock_anthropic.messages.create = AsyncMock(return_value=mock_response)
 
     completion = await create_chat_completion(
