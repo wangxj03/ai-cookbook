@@ -22,10 +22,6 @@ just run
 
 Both Qdrant collections will be stored in the `qdrant-storage` volume and mounted to the `qdrant` container when starting the code search server.
 
-## Frontend
-
-The [`frontend`](./frontend/) directory contains the frontend React code for the semantic code search interface. It is directly copied from https://github.com/qdrant/demo-code-search/tree/master/frontend.
-
 ## Backend
 
 The [`backend`](./backend/) directory contains the backend code for the semantic code search server. It is built using FastAPI and handles REST requests to interact with the Qdrant vector database. It exposes two endpoints:
