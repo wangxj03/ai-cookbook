@@ -1,0 +1,6 @@
+absl-py>=2.1.0
+fastapi
+openai>=1.47.1
+qdrant-client>=1.11.2
+starlette
+uvicorn

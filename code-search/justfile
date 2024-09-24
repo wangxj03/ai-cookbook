@@ -1,0 +1,10 @@
+run:
+    docker compose up --build
+
+search:
+    curl 'http://localhost:8000/api/search?query=geo%20condition%20filter' \
+        -H 'accept: application/json' | jq . | sed 's/\\n/\n/g'
+
+fetch:
+    curl 'http://localhost:8000/api/file?path=lib%2Fcollection%2Fsrc%2Fcollection_manager%2Foptimizers%2Findexing_optimizer.rs' \
+        -H 'accept: application/json' | jq . | sed 's/\\n/\n/g'

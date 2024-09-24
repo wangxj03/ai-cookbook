@@ -1,0 +1,6 @@
+absl-py>=2.1.0
+code-splitter>=0.1.5
+datasets>=3.0.0
+openai>=1.47.1
+pandas>=2.2.3
+qdrant-client>=1.11.2

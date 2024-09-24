@@ -1,0 +1,22 @@
+services:
+  ingestion:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    volumes:
+      - ingestion-data:/data
+    environment:
+      - OPENAI_API_KEY=${OPENAI_API_KEY}
+    depends_on:
+      - qdrant
+
+  qdrant:
+    image: qdrant/qdrant
+    ports:
+      - "6333:6333"
+    volumes:
+      - qdrant-storage:/qdrant/storage
+
+volumes:
+  ingestion-data:
+  qdrant-storage:
