@@ -22,9 +22,9 @@ RUN pip install --upgrade pip
 RUN pip install -r requirements.txt
 
 # Copy the Python files into the container
-COPY backend ./backend
+COPY src ./src
 
 # Copy the frontend files into the container
 COPY --from=builder /demo-code-search/frontend/dist ./frontend/dist
 
-ENTRYPOINT ["python", "-m", "backend.service"]
+ENTRYPOINT ["python", "-m", "src.service"]

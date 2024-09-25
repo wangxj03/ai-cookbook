@@ -13,10 +13,9 @@ The [`ingestion`](./ingestion/) directory contains the code and configuration fi
 
 Compared to the original implementation, we directly use OpenAI's embedding model instead of the open-source models. This significantly reduces the complexity of the ingestion pipeline.
 
-To run the ingestion pipeline in a containerized environment, execute the following command:
+To run the ingestion pipeline in a containerized environment, execute the following command from the `ingestion` directory:
 
 ```sh
-cd ingestion
 just run
 ```
 
@@ -29,7 +28,7 @@ The [`backend`](./backend/) directory contains the backend code for the semantic
 - **`GET /api/search`**: Searches for code snippets based on a query.
 - **`GET /api/file`**: Fetches the full content of a file based on its path.
 
-To start the server, run the following command:
+To start the server, run the following command from the `backend` directory:
 
 ```sh
 just run

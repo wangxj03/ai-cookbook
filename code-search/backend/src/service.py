@@ -9,8 +9,8 @@ from openai import AsyncOpenAI
 from qdrant_client import AsyncQdrantClient
 from starlette.staticfiles import StaticFiles
 
-from backend.code_search import CodeSearcher
-from backend.file_fetch import FileFetcher
+from src.code_search import CodeSearcher
+from src.file_fetch import FileFetcher
 
 logging.basicConfig(level=logging.DEBUG)
 
