@@ -1,6 +1,6 @@
 # README
 
-See blog post: https://wangxj03.github.io/posts/2024-08-23-anthropic-webui/
+See blog post: https://medium.com/@wangxj03/using-anthropic-models-with-open-webui-a353d11ef283
 
 ## How to run?
 

@@ -1,6 +1,6 @@
-# Semantic Code Search
+# README
 
-This application is adapted from https://github.com/qdrant/demo-code-search/tree/master to demonstrate semantic code search using Qdrant.
+See blog post: https://medium.com/@wangxj03/semantic-code-search-010c22e7d267
 
 ## Ingestion
 

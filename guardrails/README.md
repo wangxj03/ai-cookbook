@@ -1,3 +1,3 @@
 # README
 
-See blog post: https://wangxj03.github.io/posts/2024-08-18-guardrails/
+See blog post: https://medium.com/@wangxj03/ai-design-pattern-guardrails-b40a3e8141ec
