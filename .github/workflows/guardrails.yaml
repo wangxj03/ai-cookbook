@@ -28,7 +28,8 @@ jobs:
         run: |
           cd guardrails
           pip install --upgrade pip
-          pip install poetry --no-root
+          pip install poetry
+          poetry install --no-root
 
       - name: Run tests
         run: |
