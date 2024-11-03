@@ -6,7 +6,7 @@ services:
     volumes:
       - ingestion-data:/data
     environment:
-      - OPENAI_API_KEY=${OPENAI_API_KEY}
+      OPENAI_API_KEY: ${OPENAI_API_KEY}
     depends_on:
       - qdrant
 
