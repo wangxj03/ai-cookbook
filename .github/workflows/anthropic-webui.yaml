@@ -28,9 +28,9 @@ jobs:
         run: |
           cd anthropic-webui
           pip install --upgrade pip
-          pip install -r requirements.txt
+          pip install poetry --no-root
 
       - name: Run tests
         run: |
           cd anthropic-webui
-          pytest -vv
+          poetry run pytest -vv
