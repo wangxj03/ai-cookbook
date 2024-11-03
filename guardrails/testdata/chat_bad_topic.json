@@ -3,7 +3,7 @@
   "messages": [
     {
       "role": "user",
-      "content": "I love pandas"
+      "content": "I love pandas!"
     }
   ]
 }
