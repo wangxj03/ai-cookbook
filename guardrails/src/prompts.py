@@ -33,5 +33,5 @@ You are a moderation assistant. Your role is to detect content about {domain} in
 
 {content}
 
-### Evaluation (score only!)
+### Evaluation (score only)
 """
