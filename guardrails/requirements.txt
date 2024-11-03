@@ -1,8 +1,0 @@
-absl-py
-fastapi
-langfuse
-openai
-pydantic
-pytest
-pytest-asyncio
-uvicorn

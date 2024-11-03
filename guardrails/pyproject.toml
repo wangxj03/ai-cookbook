@@ -1,0 +1,21 @@
+[tool.poetry]
+name = "guardrails"
+version = "0.1.0"
+description = ""
+authors = ["Xiaojing Wang <2002434+wangxj03@users.noreply.github.com>"]
+readme = "README.md"
+
+[tool.poetry.dependencies]
+python = "^3.11"
+absl-py = "^2.1.0"
+fastapi = "^0.115.4"
+langfuse = "^2.53.3"
+openai = "^1.53.0"
+pydantic = "^2.9.2"
+pytest = "^8.3.3"
+pytest-asyncio = "^0.24.0"
+uvicorn = "^0.32.0"
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
