@@ -4,7 +4,7 @@ services:
       context: .
       dockerfile: Dockerfile
     environment:
-      - ANTHROPIC_API_KEY=${ANTHROPIC_API_KEY}
+      ANTHROPIC_API_KEY: ${ANTHROPIC_API_KEY}
     ports:
       - "8000:8000"
 
@@ -13,10 +13,10 @@ services:
     ports:
       - "3000:8080"
     environment:
-      - DEFAULT_MODELS=claude-3-5-sonnet-20240620
-      - OPENAI_API_BASE_URL=http://app:8000/v1
-      - OPENAI_API_KEY=unused
-      - WEBUI_AUTH=False
+      DEFAULT_MODELS: claude-3-5-sonnet-20240620
+      OPENAI_API_BASE_URL: http://app:8000/v1
+      OPENAI_API_KEY: unused
+      WEBUI_AUTH: False
     volumes:
       - open-webui:/app/backend/data
     restart: always
