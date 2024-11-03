@@ -3,51 +3,11 @@ services:
     build:
       context: .
       dockerfile: Dockerfile
-    depends_on:
-      - langfuse
     ports:
       - 8000:8000
     environment:
-      - OPENAI_API_KEY=${OPENAI_API_KEY}
-      - LANGFUSE_HOST=http://langfuse:3000
+      OPENAI_API_KEY: ${OPENAI_API_KEY}
+      LANGFUSE_HOST: https://us.cloud.langfuse.com
+    # Contains LANGFUSE_SECRET_KEY and LANGFUSE_PUBLIC_KEY
     env_file:
       - .env
-
-  langfuse:
-    image: langfuse/langfuse:2
-    depends_on:
-      db:
-        condition: service_healthy
-    ports:
-      - "3000:3000"
-    environment:
-      - DATABASE_URL=postgresql://postgres:postgres@db:5432/postgres
-      - NEXTAUTH_URL=http://localhost:3000
-      - NEXTAUTH_SECRET=mysecret
-      - SALT=mysalt
-      - TELEMETRY_ENABLED=${TELEMETRY_ENABLED:-true}
-      - LANGFUSE_ENABLE_EXPERIMENTAL_FEATURES=${LANGFUSE_ENABLE_EXPERIMENTAL_FEATURES:-false}
-      - AUTH_DISABLE_USERNAME_PASSWORD=true
-      - HOSTNAME=0.0.0.0
-      - LANGFUSE_DEFAULT_PROJECT_ROLE=ADMIN
-
-  db:
-    image: postgres
-    restart: always
-    healthcheck:
-      test: [ "CMD-SHELL", "pg_isready -U postgres" ]
-      interval: 3s
-      timeout: 3s
-      retries: 10
-    environment:
-      - POSTGRES_USER=postgres
-      - POSTGRES_PASSWORD=postgres
-      - POSTGRES_DB=postgres
-    ports:
-      - 5432:5432
-    volumes:
-      - database_data:/var/lib/postgresql/data
-
-volumes:
-  database_data:
-    driver: local
